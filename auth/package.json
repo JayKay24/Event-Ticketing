@@ -1,0 +1,20 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev src/index.ts"
+  },
+  "keywords": [],
+  "author": "Jimmy K Njuguna <jameskinyua590@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.7",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "typescript": "^3.9.7"
+  }
+}
