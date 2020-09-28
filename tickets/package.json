@@ -18,7 +18,7 @@
   "author": "Jimmy K Njuguna <jameskinyua590@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@jkntickets/common": "^1.0.3",
+    "@jkntickets/common": "^1.0.4",
     "@types/cookie-session": "^2.0.41",
     "@types/express": "^4.17.7",
     "@types/jsonwebtoken": "^8.5.0",
