@@ -31,7 +31,6 @@ spec:
               "-cid",
               "ticketing",
             ]
-
 ---
 apiVersion: v1
 kind: Service
