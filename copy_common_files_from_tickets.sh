@@ -22,6 +22,7 @@ cd ..
 cp ../infra/k8s/${service_name}-depl.yaml ../infra/k8s/${new_service}-depl.yaml
 cp ../infra/k8s/${service_name}-mongo-depl.yaml ../infra/k8s/${new_service}-mongo-depl.yaml
 
-sed -i -e "s/'${service_name}'/'${new_service}'/g"
+sed -i -e "s/${service_name}/${new_service}/g" ../infra/k8s/${new_service}-depl.yaml
+sed -i -e "s/${service_name}/${new_service}/g" ../infra/k8s/${new_service}-mongo-depl.yaml
 
-npm i && docker build -t jaykay24/$service_name
+npm i && docker build -t jaykay24/$service_name .
