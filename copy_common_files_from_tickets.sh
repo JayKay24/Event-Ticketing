@@ -9,13 +9,13 @@ new_service=$1
 
 mkdir $new_service && cd $_
 
-service_path=${HOME}/Desktop/personal_learning/microservices/ticketing/${service_name}
+service_path=$( pwd )/$service_name
 
-cp ${service_path}/{.dockerignore,Dockerfile,package.json,package-lock.json,tsconfig.json} .
+cp $service_path/{.dockerignore,Dockerfile,package.json,package-lock.json,tsconfig.json} .
 
 mkdir src && cd $_
 
-cp -R ${service_path}/src/{test,app.ts,index.ts,nats-wrapper.ts} .
+cp -R $service_path/src/{test,app.ts,index.ts,nats-wrapper.ts,routes} .
 
 cd ..
 
