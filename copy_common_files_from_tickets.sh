@@ -7,6 +7,12 @@
 service_name=tickets
 new_service=$1
 
+if [[ -z $new_service ]];
+then
+  echo "Please provide a service name"
+  exit 1
+fi
+
 mkdir $new_service && cd $_
 
 service_path=$( pwd )/$service_name
