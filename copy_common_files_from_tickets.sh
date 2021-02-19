@@ -6,6 +6,8 @@
 
 service_name=tickets
 new_service=$1
+docker_id=jaykay24
+db_type=$2
 
 if [[ -z $new_service ]];
 then
@@ -13,22 +15,33 @@ then
   exit 1
 fi
 
-mkdir $new_service && cd $_
+if [[ -z $db_type ]];
+then
+  echo "Please provide a database type"
+  exit 1
+fi
 
-service_path=$( pwd )/$service_name
+mkdir $new_service
 
-cp $service_path/{.dockerignore,Dockerfile,package.json,package-lock.json,tsconfig.json} .
+top_level=$( pwd )
+service_path="$top_level/$service_name"
 
-mkdir src && cd $_
+cp -n $service_path/{.dockerignore,Dockerfile,package.json,package-lock.json,tsconfig.json} $new_service
 
-cp -R $service_path/src/{test,app.ts,index.ts,nats-wrapper.ts,routes} .
+src_dir="$new_service/src"
 
-cd ..
+mkdir $src_dir
 
-cp ../infra/k8s/${service_name}-depl.yaml ../infra/k8s/${new_service}-depl.yaml
-cp ../infra/k8s/${service_name}-mongo-depl.yaml ../infra/k8s/${new_service}-mongo-depl.yaml
+cp -Rn $service_path/src/{index.ts,nats-wrapper.ts,__mocks__} $src_dir
 
-sed -i -e "s/${service_name}/${new_service}/g" ../infra/k8s/${new_service}-depl.yaml
-sed -i -e "s/${service_name}/${new_service}/g" ../infra/k8s/${new_service}-mongo-depl.yaml
+cp -n $top_level/infra/k8s/${service_name}-depl.yaml $top_level/infra/k8s/${new_service}-depl.yaml
+cp -n $top_level/infra/k8s/${service_name}-mongo-depl.yaml $top_level/infra/k8s/${new_service}-${db_type}-depl.yaml
 
-npm i && docker build -t jaykay24/$service_name .
+sed -i -e "s/${service_name}/${new_service}/g" $top_level/infra/k8s/${new_service}-depl.yaml
+sed -i -e "s/${service_name}/${new_service}/g" $top_level/infra/k8s/${new_service}-${db_type}-depl.yaml
+sed -i -e "s/mongo/redis/g" $top_level/infra/k8s/${new_service}-${db_type}-depl.yaml
+sed -i -e "s/27017/6379/g" $top_level/infra/k8s/${new_service}-${db_type}-depl.yaml
+
+cd $new_service
+
+npm i && docker build -t $docker_id/$new_service . && docker push $docker_id/$new_service
