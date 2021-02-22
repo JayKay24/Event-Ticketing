@@ -5,6 +5,7 @@ import { OrderStatus } from "@jkntickets/common";
 import { app } from "../../app";
 import { Order } from "../../models/order";
 import { stripe } from "../../stripe";
+import { Payment } from "../../models/payment";
 
 jest.mock("../../stripe");
 
@@ -74,7 +75,7 @@ it("returns a 201 with valid inputs", async () => {
 
   await order.save();
 
-  await request(app)
+  const stripeCharge = await request(app)
     .post("/api/payments")
     .set("Cookie", global.signin(userId))
     .send({ token: "tok_visa", orderId: order.id })
@@ -85,4 +86,11 @@ it("returns a 201 with valid inputs", async () => {
   expect(chargeOptions.source).toEqual("tok_visa");
   expect(chargeOptions.amount).toEqual(order.price * 100);
   expect(chargeOptions.currency).toEqual("usd");
+
+  const payment = await Payment.findOne({
+    orderId: order.id,
+  });
+
+  expect(payment).toBeDefined();
+  expect(payment!.stripeId).toBeDefined();
 });
