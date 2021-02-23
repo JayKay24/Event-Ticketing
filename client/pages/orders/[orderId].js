@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import StripeCheckout from "react-stripe-checkout";
 
-const OrderShow = ({ order }) => {
+const OrderShow = ({ order, currentUser }) => {
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
@@ -17,7 +18,17 @@ const OrderShow = ({ order }) => {
 
   if (timeLeft < 0) return <div>OrderExpired</div>;
 
-  return <div>Time left to pay: {timeLeft} seconds</div>;
+  return (
+    <div>
+      Time left to pay: {timeLeft} seconds
+      <StripeCheckout
+        token={(token) => console.log(token)}
+        stripeKey={process.env.NEXT_PUBLIC_STRIPE_KEY}
+        amount={order.ticket.price * 100}
+        email={currentUser.email}
+      />
+    </div>
+  );
 };
 
 OrderShow.getInitialProps = async (context, client) => {
