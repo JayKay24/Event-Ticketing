@@ -1,5 +1,5 @@
-import axios from "axios";
-import { useState } from "react";
+import axios from 'axios';
+import { useState } from 'react';
 
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
@@ -7,9 +7,7 @@ export default ({ url, method, body, onSuccess }) => {
   const doRequest = async (props = {}) => {
     try {
       setErrors(null);
-      updatedBody = { ...body, ...props };
-      console.log(updatedBody, "right here");
-      const response = await axios[method](url, updatedBody);
+      const response = await axios[method](url, { ...body, ...props });
 
       if (onSuccess) {
         onSuccess(response.data);
